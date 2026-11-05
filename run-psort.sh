@@ -94,6 +94,9 @@ for f in "${INPUTS[@]}"; do
         [ "$rows" -eq "$nseq" ] || die "$f: $nseq input sequences but $rows result rows"
     fi
 
-    mv "$result" "$OUT_DIR/$b.psortb.tsv"
+    # copy, not mv: /tmp and /out are usually different filesystems and mv
+    # would try (and fail, noisily) to preserve ownership
+    cp "$result" "$OUT_DIR/$b.psortb.tsv"
+    rm -f "$result"
     echo "ok: $OUT_DIR/$b.psortb.tsv ($nseq sequences, format $FORMAT)" | tee -a "$log"
 done
